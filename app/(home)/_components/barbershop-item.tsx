@@ -1,57 +1,53 @@
 "use client";
 
+import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
+import { Card, CardContent } from "@/app/_components/ui/card";
 import { Barbershop } from "@prisma/client";
-import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react";
+import { StarIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-interface BarbershopInfoProps {
+interface BarbershopItemProps {
   barbershop: Barbershop;
 }
 
-const BarbershopInfo = ({ barbershop }: BarbershopInfoProps) => {
+const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
   const router = useRouter();
 
-  const handleBackClick = () => {
-    router.back();
+  const handleBookingClick = () => {
+    router.push(`/barbershops/${barbershop.id}`);
   };
 
   return (
-    <div>
-      <div className="h-[250px] w-full relative">
-        <Button onClick={handleBackClick} size="icon" variant="outline" className="z-50 absolute top-4 left-4">
-          <ChevronLeftIcon />
-        </Button>
-
-        <Button size="icon" variant="outline" className="z-50 absolute top-4 right-4">
-          <MenuIcon />
-        </Button>
-
-        <Image
-          src={barbershop.imageUrl}
-          fill
-          alt={barbershop.name}
-          style={{
-            objectFit: "cover",
-          }}
-          className="opacity-75"
-        />
-      </div>
-
-      <div className="px-5 pt-3 pb-6 border-b border-solid border-secondary">
-        <h1 className="text-xl font-bold">{barbershop.name}</h1>
-        <div className="flex items-center gap-1 mt-2">
-          <MapPinIcon className="text-primary" size={18} />
-          <p className="text-sm">{barbershop.address}</p>
+    <Card className="min-w-[167px] max-w-[167px] rounded-2xl">
+      <CardContent className="px-1 py-0">
+        <div className="w-full h-[159px] relative">
+          <div className="absolute top-2 left-2 z-50">
+            <Badge variant="secondary" className="opacity-90 flex gap-1 items-center top-3 left-3">
+              <StarIcon size={12} className="fill-primary text-primary" />
+              <span className="text-xs">5,0</span>
+            </Badge>
+          </div>
+          <Image
+            alt={barbershop.name}
+            src={barbershop.imageUrl}
+            style={{
+              objectFit: "cover",
+            }}
+            fill
+            className="rounded-2xl"
+          />
         </div>
-        <div className="flex items-center gap-1 mt-2">
-          <StarIcon className="text-primary" size={18} />
-          <p className="text-sm">5,0 (899 avaliações)</p>
+        <div className="px-2 pb-3">
+          <h2 className="font-bold mt-2 overflow-hidden text-ellipsis text-nowrap">{barbershop.name}</h2>
+          <p className="text-sm text-gray-400 overflow-hidden text-ellipsis text-nowrap">{barbershop.address}</p>
+          <Button className="w-full mt-3" variant="secondary" onClick={handleBookingClick}>
+            Reservar
+          </Button>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
-
-export default BarbershopInfo;
+export default BarbershopItem;
